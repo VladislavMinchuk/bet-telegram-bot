@@ -1,10 +1,14 @@
 const parseTableDate = (tableArr) => {
   return tableArr.map((item) => {
-    const itemArr = item.split('\n');
+    const string = item.replace('(adsbygoogle = window.adsbygoogle || []).push({}', '');
+    const itemArr = string.split('\n');
+    let tip = itemArr[8];
+    if (tip?.length > 3) tip = tip.split(' ')[1];
+    
     const matchObj = {
       time: itemArr[0],
       teams: itemArr[1].trim(),
-      tip: itemArr[8]
+      tip
     };
 
     const predictionRawData = itemArr.filter((i) => i.includes('1: ') || i.includes('2: '))
@@ -16,7 +20,8 @@ const parseTableDate = (tableArr) => {
     matchObj.odd2 = parseFloat(predictionFormatData[3]);
 
     return matchObj;
-  });
+  })
+  .filter((i) => i.time);
 };
 
 const checkPairs = (pairsArr) => {

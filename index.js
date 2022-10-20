@@ -8,7 +8,7 @@ const BOT_TOKEN="1851079911:AAGWyQNfQbzT-WiUT_peqZYTWimxdvY1evQ";
 
 // (async function () {
 //   try {
-//     const res = await getOldZuluPage();
+//     const res = await getCurrentZuluPage();
     
 //     console.log(parseResToString(res));
 //   } catch (error) {
