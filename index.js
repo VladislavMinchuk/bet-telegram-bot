@@ -1,7 +1,7 @@
 const { getCurrentZuluPage, getOldZuluPage } = require('./api');
 const { parseResToString } = require('./helpers');
 
-const { Telegraf } = require('telegraf');
+const { Telegraf, Markup } = require('telegraf');
 
 // Should remove
 const BOT_TOKEN="1851079911:AAGWyQNfQbzT-WiUT_peqZYTWimxdvY1evQ";
@@ -18,9 +18,8 @@ const BOT_TOKEN="1851079911:AAGWyQNfQbzT-WiUT_peqZYTWimxdvY1evQ";
 
 const bot = new Telegraf(BOT_TOKEN);
 bot.start((ctx) => ctx.reply('Welcome'));
-bot.help((ctx) => ctx.reply('Send me a sticker'));
-bot.on('sticker', (ctx) => ctx.reply('👍'));
-bot.hears('hi', (ctx) => ctx.reply('Hey there'));
+
+bot.command('test', (ctx) => ctx.reply('Hey there'));
 bot.command('check', async (ctx) => {
   try {
     const res = await getCurrentZuluPage();
@@ -33,7 +32,7 @@ bot.command('check', async (ctx) => {
     console.log(error);
   }
 });
-bot.command('old', async (ctx) => {
+bot.command('check_old', async (ctx) => {
   try {
     const res = await getOldZuluPage();
     const string = parseResToString(res).join();
@@ -43,6 +42,28 @@ bot.command('old', async (ctx) => {
     console.log(error);
   }
 });
+
+
+// bot.command("onetime", ctx =>
+// 	ctx.reply(
+// 		"One time keyboard",
+// 		Markup.keyboard(["/simple", "/inline", "/pyramid"]).oneTime().resize(),
+// 	),
+// );
+
+// bot.command("inline", ctx => {
+// 	return ctx.reply("<b>Coke</b> or <i>Pepsi?</i>", {
+// 		parse_mode: "HTML",
+// 		...Markup.inlineKeyboard([
+// 			Markup.button.callback("Coke", "Coke"),
+// 			Markup.button.callback("Pepsi", "Pepsi"),
+// 		]),
+// 	});
+// });
+
+// bot.command("remove", ctx => {
+//   ctx.reply(':)', Markup.removeKeyboard())
+// });
 
 bot.launch();
 
