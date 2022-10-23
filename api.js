@@ -1,7 +1,7 @@
 const https = require('https');
 const { parseTableDate, checkPairs } = require('./helpers');
 const { getTableData } = require('./page-parser');
-const currentPage = 'https://www.zulubet.com/';
+const currentZuluUrl = 'https://www.zulubet.com/';
 const oldPage = 'https://www.zulubet.com/tips-18-10-2022.html';
 
 const getZuluReq = (url) => {
@@ -26,7 +26,7 @@ const getZuluReq = (url) => {
 };
 
 const getCurrentZuluPage = async () => {
-  const page = await getZuluReq(currentPage);
+  const page = await getZuluReq(currentZuluUrl);
   const tableArr = getTableData(page);
   const parseData = parseTableDate(tableArr);
   const result = checkPairs(parseData);
@@ -44,4 +44,4 @@ const getOldZuluPage = async () => {
 };
 
 
-module.exports = { getCurrentZuluPage, getOldZuluPage };
+module.exports = { getCurrentZuluPage, getOldZuluPage, currentZuluUrl };

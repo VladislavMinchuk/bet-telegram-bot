@@ -60,7 +60,7 @@ const parseResToString = (res) => {
       }
     }
 
-    return `${str}\n`;
+    return `${str}--------\n`;
   });
 };
 
