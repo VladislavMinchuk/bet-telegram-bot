@@ -1,40 +1,40 @@
-const { getCurrentZuluPage, getOldZuluPage, currentZuluUrl } = require('./api');
-const { parseResToString } = require('./helpers');
-
-const { Telegraf, Markup } = require('telegraf');
+const { Telegraf } = require('telegraf');
+const { message } = require('telegraf/filters');
 
 // Should remove
-const BOT_TOKEN="1851079911:AAGWyQNfQbzT-WiUT_peqZYTWimxdvY1evQ";
+const myId = 479310193;
+// Should remove
+const BOT_TOKEN="1761220574:AAGrzSScdOe5EoRxKb8C8vr5_I0FAqW3bj4";
+
+const welcomeTxt = `Напиши`;
 
 const bot = new Telegraf(BOT_TOKEN);
-bot.start((ctx) => ctx.reply('Welcome'));
+bot.start((ctx) => ctx.reply(welcomeTxt));
 
 bot.command('test', (ctx) => ctx.reply('Hey there'));
-bot.command('check', async (ctx) => {
-  try {
-    const res = await getCurrentZuluPage();
-    const string = parseResToString(res).join();
 
-    if (!string.length) ctx.reply('Nothing')
-    else ctx.reply(string, {
-      reply_markup: {
-        inline_keyboard: [[ { text: "Open in browser", url: currentZuluUrl } ]]
-      }
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
-bot.command('check_old', async (ctx) => {
-  try {
-    const res = await getOldZuluPage();
-    const string = parseResToString(res).join();
+bot.on(message('text'), async (ctx) => {
+  const { text } = ctx.update.message;
+  const { first_name } = ctx.update.message.from;
 
-    ctx.reply(string);
-  } catch (error) {
-    console.log(error);
-  }
+  // Replay to user
+  ctx.reply('Прийнято', {reply_to_message_id: ctx.message.message_id});
+
+  ctx.telegram.sendMessage(
+    myId,
+    `NEW MSG:\n\n${text}`,
+    // `NEW MSG:\n*${first_name}*\n\n${text}`,
+    {parse_mode: 'MarkdownV2'}
+  ); // Send to me
 });
+
+
+
+// bot.command('check', async (ctx) => {
+//       reply_markup: {
+//         inline_keyboard: [[ { text: "Open in browser", url: currentZuluUrl } ]]
+//       }
+// });
 
 // bot.command("remove", ctx => {
 //   ctx.reply(':)', Markup.removeKeyboard())
