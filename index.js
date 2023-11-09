@@ -30,12 +30,12 @@ bot.on(message('text'), async (ctx) => {
 });
   
 bot.on(message('photo'), (ctx) => {
-  const { photo, caption } = ctx.update.message;
+  const { photo, caption, message_id } = ctx.update.message;
   
   ctx.telegram.sendPhoto(myId, photo.pop().file_id, { caption });
-    
+  
   // Replay to user
-  ctx.reply('Прийнято', {reply_to_message_id: msgId});
+  ctx.reply('Прийнято', {reply_to_message_id: message_id});
 });
 
 
