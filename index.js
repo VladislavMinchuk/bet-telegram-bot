@@ -1,14 +1,15 @@
 const { Telegraf } = require('telegraf');
 const { message } = require('telegraf/filters');
+const env = require('dotenv');
+env.config();
 
-// Should remove
-const myId = 479310193;
-// Should remove
-const BOT_TOKEN="1761220574:AAGrzSScdOe5EoRxKb8C8vr5_I0FAqW3bj4";
+const myId = process.env.MY_ID;
+const BOT_TOKEN = process.env.BOT_TOKEN;
 
-const welcomeTxt = `Напиши`;
+const welcomeTxt = `Напишіть, шо там у Вас?\nТільки текст або одна картинка і текст`;
 
 const bot = new Telegraf(BOT_TOKEN);
+
 bot.start((ctx) => ctx.reply(welcomeTxt));
 
 bot.command('test', (ctx) => ctx.reply('Hey there'));
@@ -16,10 +17,10 @@ bot.command('test', (ctx) => ctx.reply('Hey there'));
 bot.on(message('text'), async (ctx) => {
   const { text } = ctx.update.message;
   const { first_name } = ctx.update.message.from;
-
+  
   // Replay to user
-  ctx.reply('Прийнято', {reply_to_message_id: ctx.message.message_id});
-
+  ctx.reply('Прийнято', {reply_to_message_id: ctx.update.message.message_id});
+  
   ctx.telegram.sendMessage(
     myId,
     `NEW MSG:\n\n${text}`,
@@ -27,7 +28,15 @@ bot.on(message('text'), async (ctx) => {
     {parse_mode: 'MarkdownV2'}
   ); // Send to me
 });
-
+  
+bot.on(message('photo'), (ctx) => {
+  const { photo, caption } = ctx.update.message;
+  
+  ctx.telegram.sendPhoto(myId, photo.pop().file_id, { caption });
+    
+  // Replay to user
+  ctx.reply('Прийнято', {reply_to_message_id: msgId});
+});
 
 
 // bot.command('check', async (ctx) => {
